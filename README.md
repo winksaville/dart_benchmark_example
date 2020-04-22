@@ -1,186 +1,140 @@
 Learn how to benchmark in Dart
 
-Lesson 1: Currently BenchmarkBaseX doesn't produce results with enough
-preceision to reliably detect changes in code which are less than X.
-At the moment I'm going to declare X to be the **penultimate** maximum of
-the standard deviation or about 1 to 2ms.
+The is a command line app allowing me to explore how to
+do benchmarking with Dart.
 
-Basically this isn't good enough and all these runs took 11.5 hrs or
-6.25 hrs if we choose just direct or spawned.
-
-spawned: min: 71.3283ms max: 83.9484ms(134.821) minavg: 72.8615  maxavg: 76.5544(81.9310)
-direct:  min: 71.3355ms max: 80.9694ms          minavg: 72.2415  maxavg: 76.8675
-
-Averages
-```
-    Spawn     Spawn less outlier    Direct
-     72.862      72.862             74.898
-     73.375      73.375             72.242
-     81.931      73.289             76.868
-     73.289      73.238             72.361
-     73.238      76.554             73.739
-     76.554      73.078             72.298
-     73.078      73.223             73.942
-     73.223      73.531             74.521
-     73.531      74.355             72.730
-     74.355                         72.459
-    --------------------------------------
-avg: 74.544ms    73.723ms           73.606ms
-```
-
-Standard deviations
-```
-    Spawn     Spawn less outlier    Direct
-     1.459        1.459              0.183
-     1.738        1.738              0.197
-    17.647        1.634              0.810
-     1.634        1.757              0.235
-     1.757        1.206              0.250
-     1.206        1.435              0.375
-     1.435        1.672              0.951
-     1.672        1.641              0.805
-     1.641        1.727              1.143
-     1.727                           1.647
-    --------------------------------------
-avg: 3.191ms      1.585ms            0.660ms
-```
-
-Raw data
+# Help
 ```
 wink@wink-desktop:~/prgs/dart/benchmark_example (master)
-$ time for i in {1..10}; do time dart bin/main.dart 2000 1000; done
-spawned mesaurements: {count: 1000, average: 0.0728615, min: 0.0713738, max: 0.0839484, median: 0.0724018, standardDeviation: 0.001458840}
-direct mesaurements:  {count: 1000, average: 0.0748984, min: 0.0734090, max: 0.0767000, median: 0.0748673, standardDeviation: 0.000182698}
-
-real	70m23.267s
-user	70m39.299s
-sys	0m5.974s
-spawned mesaurements: {count: 1000, average: 0.0733749, min: 0.0713484, max: 0.0797478, median: 0.0728643, standardDeviation: 0.001737770}
-direct mesaurements:  {count: 1000, average: 0.0722415, min: 0.0717987, max: 0.0740906, median: 0.0722193, standardDeviation: 0.000197311}
-
-real	70m23.230s
-user	70m39.170s
-sys	0m6.016s
-spawned mesaurements: {count: 1000, average: 0.0819310, min: 0.0715991, max: 0.1348210, median: 0.0744811, standardDeviation: 0.017646500}
-direct mesaurements:  {count: 1000, average: 0.0768675, min: 0.0763241, max: 0.0809694, median: 0.0765418, standardDeviation: 0.000809650}
-
-real	70m23.798s
-user	70m40.173s
-sys	0m5.918s
-spawned mesaurements: {count: 1000, average: 0.0732885, min: 0.0713283, max: 0.0798178, median: 0.0730300, standardDeviation: 0.001633690}
-direct mesaurements:  {count: 1000, average: 0.0723610, min: 0.0718921, max: 0.0744755, median: 0.0723115, standardDeviation: 0.000235367}
-
-real	70m23.135s
-user	70m38.951s
-sys	0m6.131s
-spawned mesaurements: {count: 1000, average: 0.0732383, min: 0.0713420, max: 0.0800241, median: 0.0725068, standardDeviation: 0.001756870}
-direct mesaurements:  {count: 1000, average: 0.0737387, min: 0.0731032, max: 0.0760107, median: 0.0736698, standardDeviation: 0.000250369}
-
-real	70m22.893s
-user	70m38.701s
-sys	0m5.721s
-spawned mesaurements: {count: 1000, average: 0.0765544, min: 0.0752545, max: 0.0839047, median: 0.0761749, standardDeviation: 0.001205950}
-direct mesaurements:  {count: 1000, average: 0.0722977, min: 0.0717504, max: 0.0773372, median: 0.0722014, standardDeviation: 0.000374994}
-
-real	70m23.065s
-user	70m38.998s
-sys	0m5.750s
-spawned mesaurements: {count: 1000, average: 0.0730777, min: 0.071345, max: 0.07892870, median: 0.0726733, standardDeviation: 0.001434790}
-direct mesaurements:  {count: 1000, average: 0.0739421, min: 0.0731196, max: 0.0779211, median: 0.0736554, standardDeviation: 0.000951186}
-
-real	70m22.914s
-user	70m38.567s
-sys	0m5.904s
-spawned mesaurements: {count: 1000, average: 0.0732230, min: 0.0715114, max: 0.0812058, median: 0.0726269, standardDeviation: 0.001671680}
-direct mesaurements:  {count: 1000, average: 0.0745207, min: 0.0740683, max: 0.0788120, median: 0.0742213, standardDeviation: 0.000804785}
-
-real	70m23.218s
-user	70m39.177s
-sys	0m5.886s
-spawned mesaurements: {count: 1000, average: 0.0735312, min: 0.0716955, max: 0.0801934, median: 0.0729409, standardDeviation: 0.001641000}
-direct mesaurements:  {count: 1000, average: 0.0727296, min: 0.0718449, max: 0.0783213, median: 0.0723669, standardDeviation: 0.001143410}
-
-real	70m23.033s
-user	70m38.503s
-sys	0m6.164s
-spawned mesaurements: {count: 1000, average: 0.0743552, min: 0.0713925, max: 0.0804364, median: 0.0737159, standardDeviation: 0.001727300}
-direct mesaurements:  {count: 1000, average: 0.0724592, min: 0.0713355, max: 0.0782232, median: 0.0718451, standardDeviation: 0.001647050}
-
-real	70m23.433s
-user	70m39.387s
-sys	0m6.037s
-
-real	703m51.986s
-user	706m30.927s
-sys	0m59.502s
+$ dart bin/main.dart 
+Error: expected command line options --spawn (-s) and or --direct (-d)
+Usage: main.dart
+-s, --spawn               
+-d, --direct              
+-W, --verboseWarmUp       
+-E, --verboseExercise     
+-w, --warmUpInMillis      (defaults to "250")
+-e, --exerciseInMillis    (defaults to "2000")
+-i, --innerLoops          (defaults to "10")
+-l, --loops               (defaults to "5")
 ```
 
-Here is an example that that took 1min and produced similar results:
+# Run
+
+To run you must select either --spawn or --direct.
+Spawn using Isolate.spawn to run the benchmark in a new isolate
+for each loop, --loops.
+```
+$ dart bin/main.dart --spawn
+spawn mesaurements: {count: 5, average:  0.006547 us  min:  0.006223 us  max:  0.007024 us  median:  0.006255 us  standardDeviation:  0.000376 us}
+```
+
+Note: I just noticed that running with -E has a lower standard
+deviation but higher average. this might have to do with thermal
+throttling, see below. I hadn't noticed that before because
+I've always been use -E. Something to investigate.
 ```
 wink@wink-desktop:~/prgs/dart/benchmark_example (master)
-$ time for i in {1..10}; do time dart bin/main.dart 200 10; done
-spawned mesaurements: {count: 10, average: 0.0715702, min: 0.0706508, max: 0.0740065, median: 0.0711108, standardDeviation: 0.00100427}
-direct mesaurements:  {count: 10, average: 0.0736336, min: 0.0733089, max: 0.0739851, median: 0.0736901, standardDeviation: 0.000222118}
+$ dart bin/main.dart --spawn -E
+time: 2.000000 s  loops: 27,701,752  elapsedTicks: 2,000,000,057  iter: 277,017,520  timePerInnerLoop: 0.072198 us  timePerIteraton: 0.007220 us
+time: 2.000000 s  loops: 27,396,200  elapsedTicks: 2,000,000,065  iter: 273,962,000  timePerInnerLoop: 0.073003 us  timePerIteraton: 0.007300 us
+time: 2.000000 s  loops: 27,522,746  elapsedTicks: 2,000,000,024  iter: 275,227,460  timePerInnerLoop: 0.072667 us  timePerIteraton: 0.007267 us
+time: 2.000000 s  loops: 26,951,243  elapsedTicks: 2,000,000,044  iter: 269,512,430  timePerInnerLoop: 0.074208 us  timePerIteraton: 0.007421 us
+time: 2.000000 s  loops: 27,653,372  elapsedTicks: 2,000,000,053  iter: 276,533,720  timePerInnerLoop: 0.072324 us  timePerIteraton: 0.007232 us
+spawn mesaurements: {count: 5, average:  0.007288 us  min:  0.007220 us  max:  0.007421 us  median:  0.007267 us  standardDeviation:  0.000072 us}
+```
 
-real	0m6.418s
-user	0m6.687s
-sys	0m0.112s
-spawned mesaurements: {count: 10, average: 0.071522, min: 0.0707645, max: 0.0720146, median: 0.0716401, standardDeviation: 0.000409629}
-direct mesaurements:  {count: 10, average: 0.073313, min: 0.0725132, max: 0.0748748, median: 0.0728286, standardDeviation: 0.000828974}
+# Lessons
 
-real	0m6.403s
-user	0m6.699s
-sys	0m0.080s
-spawned mesaurements: {count: 10, average: 0.0737269, min: 0.0705701, max: 0.0771419, median: 0.0732883, standardDeviation: 0.00194909}
-direct mesaurements:  {count: 10, average: 0.0738795, min: 0.0720482, max: 0.0788471, median: 0.073662, standardDeviation: 0.00179138}
+Lesson 2: The measurements previously were in microsecs not milliseconds
+so the precision wasn't nearly as bad as I thought.
 
-real	0m6.426s
-user	0m6.699s
-sys	0m0.119s
-spawned mesaurements: {count: 10, average: 0.0731409, min: 0.0715146, max: 0.075133, median: 0.0731578, standardDeviation: 0.000830966}
-direct mesaurements:  {count: 10, average: 0.0723125, min: 0.0721231, max: 0.0727562, median: 0.0723028, standardDeviation: 0.00016626}
+Lesson 3: To raise the precision, i.e. lower the standard deviation, it
+is critical that we increase the time spent in exercise() and have the
+number of loops calling exerciseFunc in measureFor() be in the 100's or
+1000's. With the default value of 10 in the original exercise function
+the number of loops executed by measureFor() was about 30,000,000:
 
-real	0m6.409s
-user	0m6.691s
-sys	0m0.096s
-spawned mesaurements: {count: 10, average: 0.0713942, min: 0.0701263, max: 0.0753787, median: 0.0708006, standardDeviation: 0.00165241}
-direct mesaurements:  {count: 10, average: 0.0706818, min: 0.0700512, max: 0.0718031, median: 0.0704246, standardDeviation: 0.000613779}
+```
+wink@wink-desktop:~/prgs/dart/benchmark_example (master)
+$ dart bin/main.dart --spawn -E -i 10 -l 8
+time: 2.000000 s  loops: 28,490,012  elapsedTicks: 2,000,000,015  iter: 284,900,120  timePerInnerLoop: 0.070200 us  timePerIteraton: 0.007020 us
+time: 2.000000 s  loops: 28,653,573  elapsedTicks: 2,000,000,032  iter: 286,535,730  timePerInnerLoop: 0.069799 us  timePerIteraton: 0.006980 us
+time: 2.000000 s  loops: 28,655,438  elapsedTicks: 2,000,000,036  iter: 286,554,380  timePerInnerLoop: 0.069795 us  timePerIteraton: 0.006979 us
+time: 2.000000 s  loops: 28,527,085  elapsedTicks: 2,000,000,012  iter: 285,270,850  timePerInnerLoop: 0.070109 us  timePerIteraton: 0.007011 us
+time: 2.000000 s  loops: 32,039,707  elapsedTicks: 2,000,000,041  iter: 320,397,070  timePerInnerLoop: 0.062423 us  timePerIteraton: 0.006242 us
+time: 2.000000 s  loops: 31,666,383  elapsedTicks: 2,000,000,042  iter: 316,663,830  timePerInnerLoop: 0.063158 us  timePerIteraton: 0.006316 us
+time: 2.000000 s  loops: 28,522,554  elapsedTicks: 2,000,000,022  iter: 285,225,540  timePerInnerLoop: 0.070120 us  timePerIteraton: 0.007012 us
+time: 2.000000 s  loops: 31,757,320  elapsedTicks: 2,000,000,013  iter: 317,573,200  timePerInnerLoop: 0.062978 us  timePerIteraton: 0.006298 us
+spawn mesaurements: {count: 8, average:  0.006732 us  min:  0.006242 us  max:  0.007020 us  median:  0.006980 us  standardDeviation:  0.000347 us}
+```
 
-real	0m6.401s
-user	0m6.661s
-sys	0m0.106s
-spawned mesaurements: {count: 10, average: 0.072048, min: 0.0706183, max: 0.0744843, median: 0.0718139, standardDeviation: 0.00127184}
-direct mesaurements:  {count: 10, average: 0.0729631, min: 0.0723154, max: 0.0744815, median: 0.0725709, standardDeviation: 0.000718046}
+And the standard deviation is 399 pico seconds for the do nothing run()
+function. At first blush that isn't too bad but watch what happens as
+we increase the number of loops from 10 to 1,000,000. We see the standard
+deviation reduced from 400ps to 2ps and the average reduced from 6,700ps to
+282ps:
+```
+wink@wink-desktop:~/prgs/dart/benchmark_example (master)
+$ dart bin/main.dart --spawn -E -i 10 -l 8
+time: 2.000000 s  loops: 28,493,715  elapsedTicks: 2,000,000,007  iter: 284,937,150  timePerInnerLoop: 0.070191 us  timePerIteraton: 0.007019 us
+time: 2.000000 s  loops: 27,610,059  elapsedTicks: 2,000,000,062  iter: 276,100,590  timePerInnerLoop: 0.072437 us  timePerIteraton: 0.007244 us
+time: 2.000000 s  loops: 31,915,582  elapsedTicks: 2,000,000,055  iter: 319,155,820  timePerInnerLoop: 0.062665 us  timePerIteraton: 0.006267 us
+time: 2.000000 s  loops: 32,011,927  elapsedTicks: 2,000,000,033  iter: 320,119,270  timePerInnerLoop: 0.062477 us  timePerIteraton: 0.006248 us
+time: 2.000000 s  loops: 31,615,797  elapsedTicks: 2,000,000,046  iter: 316,157,970  timePerInnerLoop: 0.063260 us  timePerIteraton: 0.006326 us
+time: 2.000000 s  loops: 31,889,897  elapsedTicks: 2,000,000,030  iter: 318,898,970  timePerInnerLoop: 0.062716 us  timePerIteraton: 0.006272 us
+time: 2.000000 s  loops: 30,988,676  elapsedTicks: 2,000,000,000  iter: 309,886,760  timePerInnerLoop: 0.064540 us  timePerIteraton: 0.006454 us
+time: 2.000000 s  loops: 27,530,765  elapsedTicks: 2,000,000,056  iter: 275,307,650  timePerInnerLoop: 0.072646 us  timePerIteraton: 0.007265 us
+spawn mesaurements: {count: 8, average:  0.006637 us  min:  0.006248 us  max:  0.007265 us  median:  0.006390 us  standardDeviation:  0.000427 us}
+wink@wink-desktop:~/prgs/dart/benchmark_example (master)
+$ dart bin/main.dart --spawn -E -i 100 -l 8
+time: 2.000000 s  loops: 16,628,605  elapsedTicks: 2,000,000,049  iter: 1,662,860,500  timePerInnerLoop: 0.120275 us  timePerIteraton: 0.001203 us
+time: 2.000000 s  loops: 15,621,709  elapsedTicks: 2,000,000,028  iter: 1,562,170,900  timePerInnerLoop: 0.128027 us  timePerIteraton: 0.001280 us
+time: 2.000000 s  loops: 15,644,201  elapsedTicks: 2,000,000,074  iter: 1,564,420,100  timePerInnerLoop: 0.127843 us  timePerIteraton: 0.001278 us
+time: 2.000000 s  loops: 16,912,388  elapsedTicks: 2,000,000,107  iter: 1,691,238,800  timePerInnerLoop: 0.118257 us  timePerIteraton: 0.001183 us
+time: 2.000000 s  loops: 15,668,669  elapsedTicks: 2,000,000,123  iter: 1,566,866,900  timePerInnerLoop: 0.127643 us  timePerIteraton: 0.001276 us
+time: 2.000000 s  loops: 15,681,215  elapsedTicks: 2,000,000,079  iter: 1,568,121,500  timePerInnerLoop: 0.127541 us  timePerIteraton: 0.001275 us
+time: 2.000000 s  loops: 17,079,620  elapsedTicks: 2,000,000,047  iter: 1,707,962,000  timePerInnerLoop: 0.117099 us  timePerIteraton: 0.001171 us
+time: 2.000000 s  loops: 17,954,237  elapsedTicks: 2,000,000,100  iter: 1,795,423,700  timePerInnerLoop: 0.111394 us  timePerIteraton: 0.001114 us
+spawn mesaurements: {count: 8, average:  0.001223 us  min:  0.001114 us  max:  0.001280 us  median:  0.001239 us  standardDeviation:  0.000060 us}
+wink@wink-desktop:~/prgs/dart/benchmark_example (master)
+$ dart bin/main.dart --spawn -E -i 10000 -l 8
+time: 2.000001 s  loops: 467,817  elapsedTicks: 2,000,001,136  iter: 4,678,170,000  timePerInnerLoop: 4.275178 us  timePerIteraton: 0.000428 us
+time: 2.000000 s  loops: 467,943  elapsedTicks: 2,000,000,013  iter: 4,679,430,000  timePerInnerLoop: 4.274025 us  timePerIteraton: 0.000427 us
+time: 2.000004 s  loops: 469,938  elapsedTicks: 2,000,003,998  iter: 4,699,380,000  timePerInnerLoop: 4.255889 us  timePerIteraton: 0.000426 us
+time: 2.000009 s  loops: 470,118  elapsedTicks: 2,000,008,555  iter: 4,701,180,000  timePerInnerLoop: 4.254269 us  timePerIteraton: 0.000425 us
+time: 2.000002 s  loops: 469,149  elapsedTicks: 2,000,001,509  iter: 4,691,490,000  timePerInnerLoop: 4.263041 us  timePerIteraton: 0.000426 us
+time: 2.000003 s  loops: 465,658  elapsedTicks: 2,000,002,995  iter: 4,656,580,000  timePerInnerLoop: 4.295004 us  timePerIteraton: 0.000430 us
+time: 2.000004 s  loops: 449,272  elapsedTicks: 2,000,003,557  iter: 4,492,720,000  timePerInnerLoop: 4.451654 us  timePerIteraton: 0.000445 us
+time: 2.000004 s  loops: 469,495  elapsedTicks: 2,000,003,997  iter: 4,694,950,000  timePerInnerLoop: 4.259905 us  timePerIteraton: 0.000426 us
+spawn mesaurements: {count: 8, average:  0.000429 us  min:  0.000425 us  max:  0.000445 us  median:  0.000427 us  standardDeviation:  0.000006 us}
+wink@wink-desktop:~/prgs/dart/benchmark_example (master)
+$ dart bin/main.dart --spawn -E -i 1000000 -l 8
+time: 2.000231 s  loops:  6,992  elapsedTicks: 2,000,231,149  iter: 6,992,000,000  timePerInnerLoop: 286.074249 us  timePerIteraton: 0.000286 us
+time: 2.000152 s  loops:  7,101  elapsedTicks: 2,000,151,951  iter: 7,101,000,000  timePerInnerLoop: 281.671870 us  timePerIteraton: 0.000282 us
+time: 2.000047 s  loops:  7,113  elapsedTicks: 2,000,047,095  iter: 7,113,000,000  timePerInnerLoop: 281.181934 us  timePerIteraton: 0.000281 us
+time: 2.000021 s  loops:  7,116  elapsedTicks: 2,000,021,110  iter: 7,116,000,000  timePerInnerLoop: 281.059740 us  timePerIteraton: 0.000281 us
+time: 2.000172 s  loops:  7,098  elapsedTicks: 2,000,172,352  iter: 7,098,000,000  timePerInnerLoop: 281.793794 us  timePerIteraton: 0.000282 us
+time: 2.000217 s  loops:  7,095  elapsedTicks: 2,000,216,555  iter: 7,095,000,000  timePerInnerLoop: 281.919176 us  timePerIteraton: 0.000282 us
+time: 2.000238 s  loops:  7,088  elapsedTicks: 2,000,238,164  iter: 7,088,000,000  timePerInnerLoop: 282.200644 us  timePerIteraton: 0.000282 us
+time: 2.000039 s  loops:  7,110  elapsedTicks: 2,000,038,713  iter: 7,110,000,000  timePerInnerLoop: 281.299397 us  timePerIteraton: 0.000281 us
+spawn mesaurements: {count: 8, average:  0.000282 us  min:  0.000281 us  max:  0.000286 us  median:  0.000282 us  standardDeviation:  0.000002 us}
+```
 
-real	0m6.402s
-user	0m6.689s
-sys	0m0.083s
-spawned mesaurements: {count: 10, average: 0.0713472, min: 0.0704297, max: 0.0756114, median: 0.0707141, standardDeviation: 0.00148819}
-direct mesaurements:  {count: 10, average: 0.0723701, min: 0.071794, max: 0.0760252, median: 0.0719044, standardDeviation: 0.00123149}
-
-real	0m6.404s
-user	0m6.685s
-sys	0m0.096s
-spawned mesaurements: {count: 10, average: 0.0738619, min: 0.073447, max: 0.0750071, median: 0.0737868, standardDeviation: 0.000433518}
-direct mesaurements:  {count: 10, average: 0.0698915, min: 0.0693591, max: 0.0708234, median: 0.0699151, standardDeviation: 0.000388844}
-
-real	0m6.406s
-user	0m6.673s
-sys	0m0.090s
-spawned mesaurements: {count: 10, average: 0.0734611, min: 0.0708402, max: 0.0753292, median: 0.0735808, standardDeviation: 0.00160857}
-direct mesaurements:  {count: 10, average: 0.0697972, min: 0.0695612, max: 0.0701205, median: 0.0697697, standardDeviation: 0.000196482}
-
-real	0m6.403s
-user	0m6.674s
-sys	0m0.097s
-spawned mesaurements: {count: 10, average: 0.0737495, min: 0.0728399, max: 0.0767808, median: 0.073266, standardDeviation: 0.00115453}
-direct mesaurements:  {count: 10, average: 0.0718126, min: 0.070406, max: 0.0732368, median: 0.0717298, standardDeviation: 0.000653855}
-
-real	0m6.401s
-user	0m6.646s
-sys	0m0.126s
-
-real	1m4.074s
-user	1m6.804s
-sys	0m1.007s
+You may have noticed that I'm useing --spawn dispatching of the
+benchmark. I do this because the data is more consistent on my
+linux desktop machine. This appears to have to do with the CPU
+temperature raising and the CPU clock being throttled:
+```
+wink@wink-desktop:~/prgs/dart/benchmark_example (master)
+$ dart bin/main.dart --direct -E -i 1000000 -l 8
+time: 2.000358 s  loops:  6,759  elapsedTicks: 2,000,357,599  iter: 6,759,000,000  timePerInnerLoop: 295.954668 us  timePerIteraton: 0.000296 us
+time: 2.000191 s  loops:  6,850  elapsedTicks: 2,000,191,473  iter: 6,850,000,000  timePerInnerLoop: 291.998755 us  timePerIteraton: 0.000292 us
+time: 2.000372 s  loops:  5,143  elapsedTicks: 2,000,372,239  iter: 5,143,000,000  timePerInnerLoop: 388.950465 us  timePerIteraton: 0.000389 us
+time: 2.000241 s  loops:  4,693  elapsedTicks: 2,000,240,747  iter: 4,693,000,000  timePerInnerLoop: 426.217930 us  timePerIteraton: 0.000426 us
+time: 2.000325 s  loops:  4,702  elapsedTicks: 2,000,325,116  iter: 4,702,000,000  timePerInnerLoop: 425.420059 us  timePerIteraton: 0.000425 us
+time: 2.000094 s  loops:  4,662  elapsedTicks: 2,000,094,404  iter: 4,662,000,000  timePerInnerLoop: 429.020679 us  timePerIteraton: 0.000429 us
+time: 2.000171 s  loops:  4,672  elapsedTicks: 2,000,171,497  iter: 4,672,000,000  timePerInnerLoop: 428.118899 us  timePerIteraton: 0.000428 us
+time: 2.000360 s  loops:  4,724  elapsedTicks: 2,000,360,127  iter: 4,724,000,000  timePerInnerLoop: 423.446259 us  timePerIteraton: 0.000423 us
+direct mesaurements:  {count: 8, average:  0.000389 us  min:  0.000292 us  max:  0.000429 us  median:  0.000424 us  standardDeviation:  0.000056 us}
 ```

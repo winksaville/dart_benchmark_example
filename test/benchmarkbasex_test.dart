@@ -15,14 +15,14 @@ class MockEmitter extends Mock implements ScoreEmitter {
 void main() {
   test('runIsCalled', () {
     final MockBenchmark mb = MockBenchmark();
-    mb.measure(warmupMillis: 1, minRunInMillis: 1);
+    mb.measure(warmUpInMillis: 1, minExerciseInMillis: 1);
     expect(mb.runCount > 1, equals(true));
   });
 
   test('BenchmarkBaseX', () {
     final BenchmarkBaseX ebm =
         BenchmarkBaseX('empty', emitter: MockEmitter());
-    ebm.report(warmupMillis: 1, minRunInMillis: 1);
+    ebm.report(warmUpInMillis: 1, minExerciseInMillis: 1);
   });
 }
 
