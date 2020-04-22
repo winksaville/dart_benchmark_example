@@ -2,9 +2,9 @@
 import 'package:benchmark_harness/benchmark_harness.dart' show ScoreEmitter, PrintEmitter;
 
 // Create a new benchmark by extending BenchmarkBase
-class EmptyBenchmark {
+class BenchmarkBaseX {
   // Empty constructor.
-  const EmptyBenchmark(this.name, {this.emitter=const PrintEmitter()});
+  const BenchmarkBaseX(this.name, {this.emitter=const PrintEmitter()});
 
   final String name;
   final ScoreEmitter emitter;

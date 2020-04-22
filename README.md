@@ -1,6 +1,6 @@
 Learn how to benchmark in Dart
 
-Lesson 1: Currently EmptyBenchmark doesn't produce results with enough
+Lesson 1: Currently BenchmarkBaseX doesn't produce results with enough
 preceision to reliably detect changes in code which are less than X.
 At the moment I'm going to declare X to be the **penultimate** maximum of
 the standard deviation or about 1 to 2ms.
