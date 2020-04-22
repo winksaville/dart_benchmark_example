@@ -52,7 +52,7 @@ Future<void> main(List<String> arguments) async {
 
 double doMeasurement(DoMeasurementArgs doma) {
   const EmptyBenchmark bmark = EmptyBenchmark('empty');
-  final double measurement = bmark.measureX(minRunInMillis: doma.runTimeInMilliSecs);
+  final double measurement = bmark.measure(minRunInMillis: doma.runTimeInMilliSecs);
   if (doma.sendPort != null) {
     doma.sendPort.send(measurement);
   }

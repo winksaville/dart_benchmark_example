@@ -1,9 +1,9 @@
-import 'package:benchmark_harness/benchmark_harness.dart' as bmh;
+import 'package:benchmark_harness/benchmark_harness.dart' show ScoreEmitter;
 import 'package:benchmark_example/benchmark_example.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-class MockEmitter extends Mock implements bmh.ScoreEmitter {
+class MockEmitter extends Mock implements ScoreEmitter {
   MockEmitter();
 
   @override
@@ -15,14 +15,14 @@ class MockEmitter extends Mock implements bmh.ScoreEmitter {
 void main() {
   test('runIsCalled', () {
     final MockBenchmark mb = MockBenchmark();
-    mb.measureX(warmupMillis: 1, minRunInMillis: 1);
+    mb.measure(warmupMillis: 1, minRunInMillis: 1);
     expect(mb.runCount > 1, equals(true));
   });
 
   test('EmptyBenchmark', () {
     final EmptyBenchmark ebm =
         EmptyBenchmark('empty', emitter: MockEmitter());
-    ebm.reportX(warmupMillis: 1, minRunInMillis: 1);
+    ebm.report(warmupMillis: 1, minRunInMillis: 1);
   });
 }
 
