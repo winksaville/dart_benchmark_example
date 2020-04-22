@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
-import 'package:benchmark_example/benchmark_example.dart';
+import 'package:benchmark_example/benchmarkbasex.dart';
 import 'package:stats/stats.dart' as st;
 
 class DoMeasurementArgs {
@@ -24,25 +24,27 @@ Future<void> main(List<String> arguments) async {
   st.Stats<double> stats;
 
   for (int i = 0; i < loops; i++) {
-      final ReceivePort receivePort = ReceivePort();
+    final ReceivePort receivePort = ReceivePort();
 
-      final DoMeasurementArgs doma = DoMeasurementArgs(receivePort.sendPort, runTimeInMilliSecs, i);
-      final Isolate isolate = await Isolate.spawn(doMeasurement, doma);
+    final DoMeasurementArgs doma =
+        DoMeasurementArgs(receivePort.sendPort, runTimeInMilliSecs, i);
+    final Isolate isolate = await Isolate.spawn(doMeasurement, doma);
 
-      await receivePort.first.then((dynamic value) {
-        if (value is double) {
-          measurements.add(value);
-        }
-      });
+    await receivePort.first.then((dynamic value) {
+      if (value is double) {
+        measurements.add(value);
+      }
+    });
 
-      isolate.kill();
+    isolate.kill();
   }
   stats = st.Stats<double>.fromData(measurements);
   print('spawned mesaurements: ${stats.withPrecision(6)}');
 
   measurements = <double>[];
   for (int i = 0; i < loops; i++) {
-    measurements.add(doMeasurement(DoMeasurementArgs(null, runTimeInMilliSecs, i)));
+    measurements
+        .add(doMeasurement(DoMeasurementArgs(null, runTimeInMilliSecs, i)));
   }
   stats = st.Stats<double>.fromData(measurements);
   print('direct mesaurements:  ${stats.withPrecision(6)}');
@@ -52,7 +54,8 @@ Future<void> main(List<String> arguments) async {
 
 double doMeasurement(DoMeasurementArgs doma) {
   const BenchmarkBaseX bmark = BenchmarkBaseX('empty');
-  final double measurement = bmark.measure(minRunInMillis: doma.runTimeInMilliSecs);
+  final double measurement =
+      bmark.measure(minRunInMillis: doma.runTimeInMilliSecs);
   if (doma.sendPort != null) {
     doma.sendPort.send(measurement);
   }
