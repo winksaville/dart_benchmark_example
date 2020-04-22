@@ -1,6 +1,4 @@
 // Import BenchmarkBase class.
-import 'dart:io';
-
 import 'package:benchmark_harness/benchmark_harness.dart';
 
 // Create a new benchmark by extending BenchmarkBase
