@@ -12,6 +12,17 @@ class MockEmitter extends Mock implements ScoreEmitter {
   }
 }
 
+class MockBenchmark extends BenchmarkBaseX {
+  MockBenchmark() : super('mock BenchmarkBaseX');
+
+  int runCount = 0;
+
+  @override
+  void run() {
+    runCount++;
+  }
+}
+
 void main() {
   test('runIsCalled', () {
     final MockBenchmark mb = MockBenchmark();
@@ -24,15 +35,4 @@ void main() {
         BenchmarkBaseX('empty', emitter: MockEmitter());
     ebm.report(warmUpInMillis: 1, minExerciseInMillis: 1);
   });
-}
-
-class MockBenchmark extends BenchmarkBaseX {
-  MockBenchmark() : super('mock BenchmarkBaseX');
-
-  int runCount = 0;
-
-  @override
-  void run() {
-    runCount++;
-  }
 }
