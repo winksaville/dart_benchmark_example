@@ -1,7 +1,7 @@
-name: benchmark_example
-description: A sample command-line application.
+name: benchmark_base_x
+description: Exploring benchmarking in dart
 version: 0.1.0
-homepage: https://github.com/winksaville/benchmark_example
+homepage: https://github.com/winksaville/dart_benchmark_base_x
 
 environment:
   sdk: '>=2.7.0 <3.0.0'

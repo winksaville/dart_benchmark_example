@@ -1,6 +1,6 @@
 import 'dart:async' show TimeoutException;
 
-import 'package:benchmark_example/benchmarkbasex.dart';
+import 'package:benchmark_base_x/benchmarkbasex.dart';
 import 'package:test/test.dart';
 
 class BenchmarkDelayMicros extends BenchmarkBaseX {
