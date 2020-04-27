@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 import 'package:args/args.dart' as args;
-import 'package:benchmark_base_x/benchmarkbasex.dart';
+import 'package:benchmark_framework_x/benchmark_framework_x.dart';
 import 'package:intl/intl.dart';
 import 'package:stats/stats.dart' as st;
 

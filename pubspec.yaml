@@ -1,7 +1,7 @@
-name: benchmark_base_x
-description: Exploring benchmarking in dart
+name: benchmark_framework_x
+description: Experimental benchmarking framework in dart
 version: 0.1.0
-homepage: https://github.com/winksaville/dart_benchmark_base_x
+homepage: https://github.com/winksaville/dart_benchmark_framework_x.git
 
 environment:
   sdk: '>=2.7.0 <3.0.0'

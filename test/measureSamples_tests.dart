@@ -1,6 +1,6 @@
 import 'package:stats/stats.dart' as st;
 import 'package:intl/intl.dart';
-import 'package:benchmark_base_x/benchmarkbasex.dart';
+import 'package:benchmark_framework_x/benchmark_framework_x.dart';
 import 'package:test/test.dart';
 
 class BenchmarkDelaySecs extends BenchmarkBaseX {

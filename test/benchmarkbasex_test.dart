@@ -1,5 +1,5 @@
 import 'package:benchmark_harness/benchmark_harness.dart' show ScoreEmitter;
-import 'package:benchmark_base_x/benchmarkbasex.dart';
+import 'package:benchmark_framework_x/benchmark_framework_x.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
