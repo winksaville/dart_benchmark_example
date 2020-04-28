@@ -1,14 +1,17 @@
-import 'package:benchmark_harness/benchmark_harness.dart' show ScoreEmitter;
 import 'package:benchmark_framework_x/benchmark_framework_x.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
-class MockEmitter extends Mock implements ScoreEmitter {
+class MockEmitter extends Mock implements StatsEmitter {
   MockEmitter();
 
   @override
-  void emit(String testName, double value) {
-    expect(value > 0.0, equals(true));
+  void emit(String testName, List<double> values) {
+    for (int i = 0; i < values.length; i++) {
+      expect(values[i] > 0.0, equals(true),
+          reason:
+              'Expected all values to be > 0.0, but values[$i]=${values[i]}');
+    }
   }
 }
 
@@ -31,8 +34,7 @@ void main() {
   });
 
   test('BenchmarkBaseX', () {
-    final BenchmarkBaseX ebm =
-        BenchmarkBaseX('empty', emitter: MockEmitter());
+    final BenchmarkBaseX ebm = BenchmarkBaseX('empty', emitter: MockEmitter());
     ebm.report(warmUpInMillis: 1, minExerciseInMillis: 1);
   });
 }

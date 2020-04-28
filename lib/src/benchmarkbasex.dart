@@ -1,6 +1,6 @@
-import 'package:benchmark_harness/benchmark_harness.dart'
-    show ScoreEmitter, PrintEmitter;
 import 'package:intl/intl.dart';
+
+import 'stats_emitter.dart';
 
 // Create a new benchmark by extending BenchmarkBase
 class BenchmarkBaseX {
@@ -10,12 +10,12 @@ class BenchmarkBaseX {
   static const int kWarmUpInMillisDefault = 200;
   static const int kExcerciseInMillisDefault = 2000;
   static const int kInnerLoopsDefault = 10;
-  static const int kSamplesDefault = 10;
+  static const int kSampleCountDefault = 100;
   static const double kEstimateInnerLoopsErrorFactorDefault = 10 / 100;
   static const double kCalcuationThreadholdDefault = 0.50;
 
   final String name;
-  final ScoreEmitter emitter;
+  final StatsEmitter emitter;
 
   // The benchmark code.
   // This function is not used, if both [warmup] and [exercise] are overridden.
@@ -96,11 +96,12 @@ class BenchmarkBaseX {
   }
 
   void report(
-      {int warmUpInMillis = kWarmUpInMillisDefault,
+      {int sampleCount = kSampleCountDefault,
+      int warmUpInMillis = kWarmUpInMillisDefault,
       int minExerciseInMillis = kExcerciseInMillisDefault}) {
     emitter.emit(
         name,
-        measure(
+        measureSamples(sampleCount: sampleCount,
             warmUpInMillis: warmUpInMillis,
             minExerciseInMillis: minExerciseInMillis));
   }
@@ -284,7 +285,7 @@ class BenchmarkBaseX {
 
   /// Measure and return samples
   List<double> measureSamples(
-      {int samples = kSamplesDefault,
+      {int sampleCount = kSampleCountDefault,
       List<double> sampleListInSecs,
       int warmUpInMillis = kWarmUpInMillisDefault,
       int minExerciseInMillis = kExcerciseInMillisDefault,
@@ -304,25 +305,25 @@ class BenchmarkBaseX {
     if (verboseExercise) {
       print('measureSamples: estimate inner loops, '
           'searchTimeInSecs=$searchTimeInSecs '
-          'minExerciseInSecs=$minExerciseInSecs samples=$samples');
+          'minExerciseInSecs=$minExerciseInSecs sampleCount=$sampleCount');
     }
     final int innerLoops = estimateInnerLoops(
-        searchTimeInSecs, exercise, minExerciseInSecs, samples,
+        searchTimeInSecs, exercise, minExerciseInSecs, sampleCount,
         errorFactor: errorFactor, verbose: verboseExercise);
 
     // Besure we have a list and that its long enough
     //print('measureSamples: init sampleList');
-    if ((sampleListInSecs == null) || (sampleListInSecs.length < samples)) {
-      sampleListInSecs = List<double>(samples);
+    if ((sampleListInSecs == null) || (sampleListInSecs.length < sampleCount)) {
+      sampleListInSecs = List<double>(sampleCount);
     }
 
     // Run the benchmark and gather the data
     if (verboseExercise) {
       print('measureSamples: beginning loop '
-          'samples=$samples innerLoops=$innerLoops');
+          'sampleCount=$sampleCount innerLoops=$innerLoops');
     }
     final Stopwatch watch = Stopwatch();
-    for (int i = 0; i < samples; i++) {
+    for (int i = 0; i < sampleCount; i++) {
       watch.reset();
       watch.start();
       exercise(innerLoops);

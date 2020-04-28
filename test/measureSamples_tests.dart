@@ -43,7 +43,7 @@ void main() {
     const double kDelay = 100e-6;
     final BenchmarkDelaySecs bm = BenchmarkDelaySecs('dm100', kDelay);
 
-    final List<double> s = bm.measureSamples(samples: 1000);
+    final List<double> s = bm.measureSamples(sampleCount: 1000);
 
     expect(s, isNotNull);
     expect(s.length == 1000, isTrue);
