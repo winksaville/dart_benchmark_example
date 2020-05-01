@@ -9,7 +9,6 @@ environment:
 dependencies:
   args: ^1.6.0
   benchmark_harness: ^1.0.0
-  dart_numerics: ^0.0.5
   stats: ^1.0.0
 
 dev_dependencies:

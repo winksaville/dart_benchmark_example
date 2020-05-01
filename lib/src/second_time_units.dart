@@ -1,5 +1,9 @@
-import 'dart:math' show pow;
-import 'package:dart_numerics/dart_numerics.dart' show log10;
+import 'dart:math' show pow, ln10, log;
+
+// From: https://math.stackexchange.com/a/1425065
+double log10(double n) {
+  return log(n) / ln10;
+}
 
 class SecondTimeUnits {
   SecondTimeUnits(this.factor, this.unitsName);
