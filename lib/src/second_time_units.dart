@@ -8,7 +8,7 @@ double log10(double n) {
 class SecondTimeUnits {
   SecondTimeUnits(this.factor, this.unitsName);
 
-  static const int kMaxDecimalPlaces = 15;
+  static const int _kMaxDecimalPlaces = 15;
   double factor;
   String unitsName;
 
@@ -34,7 +34,7 @@ class SecondTimeUnits {
 
   static SecondTimeUnits info(double value) {
     value = value.abs();
-    if (value == 0 || value >= 1) {
+    if (value.isNaN || value == 0 || value >= 1) {
       return _timeUnits[0];
     } else {
       final int log10v = log10(value).toInt().abs() + 1;
@@ -49,16 +49,20 @@ class SecondTimeUnits {
   /// Converts value, which is time in seconds, to a decimal a string and
   /// appends the units on to the end of the string.
   ///
-  /// value: is the value to convert
+  /// value: is the value to convert, an NaN is converted to 0
   /// decimalPlaces: is the number of digits to the right of the decimal point.
   ///
   /// returns: a String
   static String asString(double value, {int decimalPlaces = 3}) {
+    if (value.isNaN) {
+      value = 0;
+    }
+
     int decPlaces = decimalPlaces;
     if (decPlaces <= 0) {
       decPlaces = 0;
-    } else if (decPlaces > kMaxDecimalPlaces) {
-      decPlaces = kMaxDecimalPlaces;
+    } else if (decPlaces > _kMaxDecimalPlaces) {
+      decPlaces = _kMaxDecimalPlaces;
     }
 
     final SecondTimeUnits stu = info(value);
@@ -71,17 +75,23 @@ class SecondTimeUnits {
     // Compute the "whole number", i.e. value left of decimal point.
     final double pow10 = pow(10, decPlaces).toDouble();
     final double x = (value * stu.factor * pow10).roundToDouble();
-    final int whole = x ~/ pow10;
+    int whole;
+    int decimal;
+    if (x.isFinite) {
+      whole = x ~/ pow10;
+      decimal = (x.abs() % pow10).toInt();
+    } else {
+      whole = 0;
+      decimal = 0;
+    }
 
     if (decPlaces <= 0) {
       return '$whole${stu.unitsName}';
     }
 
-    // Compute the "decimal number", i.e. value right of the decimal point.
-    int decimal = (x.abs() % pow10).toInt();
 
     // Convert the decimal to string starting at the least significant
-    // digits, which are on the right. I.e. fill "dd"
+    // digits, which are on the right.
     final List<int> decimalDigits = List<int>(decPlaces);
     const int zeroCharCode = 0x30;
 
@@ -92,6 +102,11 @@ class SecondTimeUnits {
       //    '\"${String.fromCharCode(decimalDigits[i])}\"');
     }
 
-    return '$whole.${String.fromCharCodes(decimalDigits)}${stu.unitsName}';
+    if (x.isFinite) {
+      return '$whole.${String.fromCharCodes(decimalDigits)}${stu.unitsName}';
+    } else {
+       String sign = x >= 0 ? '' : '-';
+       return '${sign}inf.${String.fromCharCodes(decimalDigits)}${stu.unitsName}';
+    }
   }
 }

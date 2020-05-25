@@ -3,6 +3,30 @@ import 'package:test/test.dart';
 
 void main() {
   group('SecondsTimeUnits.info', () {
+    test('infinity seconds', () {
+      final SecondTimeUnits result = SecondTimeUnits.info(double.infinity);
+      expect(result.factor, 1);
+      expect(result.unitsName, 's');
+    });
+
+    test('negativeInfinity seconds', () {
+      final SecondTimeUnits result = SecondTimeUnits.info(-double.negativeInfinity);
+      expect(result.factor, 1);
+      expect(result.unitsName, 's');
+    });
+
+    test('nan seconds', () {
+      final SecondTimeUnits result = SecondTimeUnits.info(double.nan);
+      expect(result.factor, 1);
+      expect(result.unitsName, 's');
+    });
+
+    test('-nan seconds', () {
+      final SecondTimeUnits result = SecondTimeUnits.info(-double.nan);
+      expect(result.factor, 1);
+      expect(result.unitsName, 's');
+    });
+
     test('10.0 seconds', () {
       final SecondTimeUnits result = SecondTimeUnits.info(10.0);
       expect(result.factor, 1);
@@ -47,6 +71,36 @@ void main() {
   });
 
   group('SecondsTimeUnits.asString', () {
+    test('infinity seconds', () {
+      final String result = SecondTimeUnits.asString(double.infinity, decimalPlaces: 2);
+      expect(result, 'inf.00s');
+    });
+
+    test('minus Infinity seconds', () {
+      final String result = SecondTimeUnits.asString(-double.infinity, decimalPlaces: 2);
+      expect(result, '-inf.00s');
+    });
+
+    test('negativeInfinity seconds', () {
+      final String result = SecondTimeUnits.asString(double.negativeInfinity, decimalPlaces: 2);
+      expect(result, '-inf.00s');
+    });
+
+    test('minus negativeInfinity seconds', () {
+      final String result = SecondTimeUnits.asString(-double.negativeInfinity, decimalPlaces: 2);
+      expect(result, 'inf.00s');
+    });
+
+    test('NaN seconds', () {
+      final String result = SecondTimeUnits.asString(double.nan, decimalPlaces: 2);
+      expect(result, '0.00s');
+    });
+
+    test('-NaN seconds', () {
+      final String result = SecondTimeUnits.asString(-double.nan, decimalPlaces: 2);
+      expect(result, '0.00s');
+    });
+
     test('10 seconds with negative decimalPlaces', () {
       final String result = SecondTimeUnits.asString(10.0, decimalPlaces: -1);
       expect(result, '10s');
